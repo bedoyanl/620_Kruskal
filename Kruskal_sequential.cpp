@@ -103,6 +103,7 @@ void Graph::print() {
 int main() {
   {
   Timer timer;
+// edit the graph size and edges and then see the duration. 
   Graph g(6);
   g.AddWeightedEdge(0, 1, 4);
   g.AddWeightedEdge(0, 2, 4);
