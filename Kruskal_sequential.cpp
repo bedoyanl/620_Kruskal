@@ -6,8 +6,13 @@
 #include <iostream>
 #include <vector>
 #include <chrono>
-using namespace std;
+#include <iostream>
+#include <cstdlib>
+#include <ctime>
+#include <random>
 
+using namespace std;
+using namespace std::chrono;
 #define edge pair<int, int>
 class Timer
 {
@@ -100,29 +105,63 @@ void Graph::print() {
     cout << endl;
   }
 }
-int main() {
-  {
-  Timer timer;
-// edit the graph size and edges and then see the duration. 
-  Graph g(6);
-  g.AddWeightedEdge(0, 1, 4);
-  g.AddWeightedEdge(0, 2, 4);
-  g.AddWeightedEdge(1, 2, 2);
-  g.AddWeightedEdge(1, 0, 4);
-  g.AddWeightedEdge(2, 0, 4);
-  g.AddWeightedEdge(2, 1, 2);
-  g.AddWeightedEdge(2, 3, 3);
-  g.AddWeightedEdge(2, 5, 2);
-  g.AddWeightedEdge(2, 4, 4);
-  g.AddWeightedEdge(3, 2, 3);
-  g.AddWeightedEdge(3, 4, 3);
-  g.AddWeightedEdge(4, 2, 4);
-  g.AddWeightedEdge(4, 3, 3);
-  g.AddWeightedEdge(5, 2, 2);
-  g.AddWeightedEdge(5, 4, 3);
+int main() 
+{
+    srand(time(NULL)); // Initialize random seed
 
-  g.kruskal();
-  g.print();
-  }
-  return 0;
+    for (int n = 10; n <= 1000; n += 10) { // Loop over different graph sizes
+        int m = n * (n - 1) / 2; // Calculate maximum number of edges
+
+        // Generate a random graph of size n and m edges
+        Graph g(n);
+        // ...
+
+        random_device rd;
+    mt19937 gen(rd());
+    uniform_int_distribution<int> dist_weight(1, 30);
+    uniform_int_distribution<int> dist_vertex(0, n - 1);
+
+    // Generate num_edges random edges with random weights
+    for (int i = 0; i < m; i++) {
+        int u = dist_vertex(gen);
+        int v = dist_vertex(gen);
+        int w = dist_weight(gen);
+        g.AddWeightedEdge(u, v, w);
+    }
+
+        auto start = high_resolution_clock::now(); // Start timer
+        // Run Kruskal's algorithm on the generated graph
+        g.kruskal();
+        // ...
+        auto end = high_resolution_clock::now(); // End timer
+
+        auto duration = duration_cast<milliseconds>(end - start); // Compute duration
+
+        cout << "Graph size: " << n << ", time taken: " << duration.count() << " ms" << endl;
+    }
+
+    return 0;
 }
+  
+//{
+  //	Timer timer;
+  	//Graph g(6);
+  //g.AddWeightedEdge(0, 1, 4);
+  //g.AddWeightedEdge(0, 2, 4);
+  //g.AddWeightedEdge(1, 2, 2);
+  //g.AddWeightedEdge(1, 0, 4);
+  //g.AddWeightedEdge(2, 0, 4);
+  //g.AddWeightedEdge(2, 1, 2);
+  //g.AddWeightedEdge(2, 3, 3);
+  //g.AddWeightedEdge(2, 5, 2);
+  //g.AddWeightedEdge(2, 4, 4);
+  //g.AddWeightedEdge(3, 2, 3);
+  //g.AddWeightedEdge(3, 4, 3);
+  //g.AddWeightedEdge(4, 2, 4);
+  //g.AddWeightedEdge(4, 3, 3);
+  //g.AddWeightedEdge(5, 2, 2);
+  //g.AddWeightedEdge(5, 4, 3);
+
+ // g.kruskal();
+  //g.print();
+//}
